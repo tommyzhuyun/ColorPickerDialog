@@ -7,7 +7,7 @@
 2. 采用了FastBitmapLib的方法进行图像的处理，请参考：[FastBitmap](https://github.com/LuizZak/FastBitmap)
 3. 全图像界面以鼠标反馈来改变图像
    1. 为了达成高速反馈，模拟使用了双重缓冲(SquareBitmap.Bitmap -> .clone)
-   2. 可调整GUI界面，无需固定图像大小
+   2. 另外引用时可自由调整GUI界面，无需固定图像大小（未经过大改的尝试，不过还是建议直接使用不要动它）
 
 ## 使用方法
 ```Cs
