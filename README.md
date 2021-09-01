@@ -14,6 +14,7 @@
 // 做好接收Color结构体的准备
 Color Picker; 
 ColorPicker.ColorPickers cp = new ColorPicker.ColorPickers(Color.White);
+//启动取色窗口
 if (cp.ShowDialog() == DialogResult.OK)
 {
     // 保存你获得的颜色
