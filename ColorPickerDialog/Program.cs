@@ -13,6 +13,9 @@ namespace ColorPickerDialog
         [STAThread]
         static void Main()
         {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
             Color Picker;
             ColorPicker.ColorPickers cp = new ColorPicker.ColorPickers(Color.Black);
             if (cp.ShowDialog() == DialogResult.OK)
