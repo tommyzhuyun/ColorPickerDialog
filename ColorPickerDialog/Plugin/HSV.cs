@@ -273,10 +273,7 @@ namespace ColorPicker.Plugin
         /// <returns>相同则返回True，不相同则返回False</returns>
         public static Boolean Compair(int compair1, int compair2)
         {
-            if ((compair1 ^ 0xFFFFFF) == (compair2 ^ 0xFFFFFF))
-                return true;
-
-            return false;
+            return (compair1 ^ 0xFFFFFF) == (compair2 ^ 0xFFFFFF);
         }
 
         /// <summary>
