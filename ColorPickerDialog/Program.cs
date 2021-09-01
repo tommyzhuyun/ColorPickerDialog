@@ -17,7 +17,7 @@ namespace ColorPickerDialog
             Application.SetCompatibleTextRenderingDefault(false);
 
             Color Picker;
-            ColorPicker.ColorPickers cp = new ColorPicker.ColorPickers(Color.Black);
+            ColorPicker.ColorPickers cp = new ColorPicker.ColorPickers(Color.White);
             if (cp.ShowDialog() == DialogResult.OK)
             {
                 Picker = cp.SetColor;
