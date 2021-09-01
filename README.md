@@ -3,7 +3,7 @@
 ![ColorPicker](/ColorPicker.png)
 
 该取色界面具备以下特点：
-1. 高速化了RGB转换HSV的速度，大约有6成的提升（比起使用浮动小数和Class结构而言） ->  [HSV.cs](/Plugin/HSV.cs)
+1. 高速化了RGB转换HSV的速度，大约有6成的提升（比起使用浮动小数和Class结构而言） ->  [HSV.cs](ColorPickerDialog/Plugin/HSV.cs)
 2. 采用了FastBitmapLib的方法进行图像的处理，请参考：[FastBitmap](https://github.com/LuizZak/FastBitmap)
 3. 全图像界面以鼠标反馈来改变图像
    1. 为了达成高速反馈，模拟使用了双重缓冲(SquareBitmap.Bitmap -> .clone)
