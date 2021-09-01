@@ -516,7 +516,7 @@ namespace ColorPicker
             this.Reset.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Reset.Name = "Reset";
             this.Reset.Size = new System.Drawing.Size(41, 23);
-            this.Reset.TabIndex = 22;
+            this.Reset.TabIndex = 9;
             this.Reset.Text = "重置";
             this.Reset.UseVisualStyleBackColor = true;
             this.Reset.Click += new System.EventHandler(this.Reset_Click);
@@ -548,7 +548,7 @@ namespace ColorPicker
             this.HTML.Location = new System.Drawing.Point(390, 307);
             this.HTML.Name = "HTML";
             this.HTML.Size = new System.Drawing.Size(165, 23);
-            this.HTML.TabIndex = 0;
+            this.HTML.TabIndex = 7;
             this.HTML.TextChanged += new System.EventHandler(this.MainHTMLChanged);
             // 
             // Older
