@@ -101,7 +101,7 @@ namespace ColorPicker.Plugin
         /// <param name="R">Red:0~255</param>
         /// <param name="G">Green:0~255</param>
         /// <param name="B">Blue:0~255</param>
-        /// <returns></returns>
+        /// <returns>HsvColor</returns>
         public static HSV FromRgb(byte R, byte G, byte B)
         {
             byte max = Math.Max(R, Math.Max(G, B));

@@ -36,7 +36,6 @@ namespace ColorPicker
         {
             InitializeComponent();
             this.GivenColor = Color;
-            this.Debug.Visible = false;
             this.GivenChannel = this.LastChannel = SquareBitmap.HUE;
         }
 

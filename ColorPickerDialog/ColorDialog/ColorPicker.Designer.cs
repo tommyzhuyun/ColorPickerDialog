@@ -70,7 +70,6 @@ namespace ColorPicker
             this.Cancle = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.HTML = new System.Windows.Forms.TextBox();
-            this.Debug = new System.Windows.Forms.Label();
             this.Older = new System.Windows.Forms.PictureBox();
             this.Newer = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.ColorBox)).BeginInit();
@@ -552,15 +551,6 @@ namespace ColorPicker
             this.HTML.TabIndex = 0;
             this.HTML.TextChanged += new System.EventHandler(this.MainHTMLChanged);
             // 
-            // Debug
-            // 
-            this.Debug.AutoSize = true;
-            this.Debug.Location = new System.Drawing.Point(608, 310);
-            this.Debug.Name = "Debug";
-            this.Debug.Size = new System.Drawing.Size(47, 17);
-            this.Debug.TabIndex = 11;
-            this.Debug.Text = "Debug";
-            // 
             // Older
             // 
             this.Older.Location = new System.Drawing.Point(79, 371);
@@ -584,7 +574,6 @@ namespace ColorPicker
             this.ClientSize = new System.Drawing.Size(838, 404);
             this.Controls.Add(this.Newer);
             this.Controls.Add(this.Older);
-            this.Controls.Add(this.Debug);
             this.Controls.Add(this.HTML);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.Cancle);
@@ -675,7 +664,6 @@ namespace ColorPicker
         private System.Windows.Forms.PictureBox PointH;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox HTML;
-        private System.Windows.Forms.Label Debug;
         private System.Windows.Forms.PictureBox PointB;
         private System.Windows.Forms.PictureBox PointG;
         private System.Windows.Forms.PictureBox PointR;
