@@ -13,6 +13,7 @@
 ```Cs
 // 做好接收Color结构体的准备
 Color Picker; 
+// 创建取色class，需给予初始状态的颜色
 ColorPicker.ColorPickers cp = new ColorPicker.ColorPickers(Color.White);
 //启动取色窗口
 if (cp.ShowDialog() == DialogResult.OK)
