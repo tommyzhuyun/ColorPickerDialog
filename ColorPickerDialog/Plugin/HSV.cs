@@ -262,7 +262,7 @@ namespace ColorPicker.Plugin
         /// <returns>相同则返回True，不相同则返回False</returns>
         public static Boolean Compair(Color compair1, Color compair2)
         {
-            return Compair(compair1.ToArgb(), compair2.ToArgb());
+            return compair1.R == compair2.R && compair1.G == compair2.G && compair1.B == compair2.B;
         }
 
         /// <summary>
