@@ -11,6 +11,7 @@
    3. 改善了画面撕裂，延迟卡顿的现象
 
 ## 使用方法
+试用时：直接启动[Program.cs](/ColorPickerDialog/Program.cs)
 ```Cs
 // 做好接收Color结构体的准备
 Color Picker; 
