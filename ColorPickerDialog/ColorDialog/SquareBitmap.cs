@@ -6,10 +6,11 @@
  *  Version 1.0
  *  2021.8.22
  */
-using ColorPicker.Plugin;
+
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using FastBitmapLib;
 
 
 
@@ -172,31 +173,32 @@ namespace ColorPicker
         /// </summary>
         private void UpColorPlate()
         {
-            using (FastBitmapLib.FastBitmap bp = new FastBitmapLib.FastBitmap(HSVRGB))
+            int Width = HSVRGB.Width;
+            int Height = HSVRGB.Height;
+            using (FastBitmap bp = HSVRGB.FastLock())
             {
-                bp.Lock();
+                //Copy Array From Memory
+                int[] DataArray = bp.DataArray;
                 int ft, rg, hue;
                 int SetColor;
-                int width = HSVRGB.Width;
-                int height = HSVRGB.Height;
-                for (int i = 0; i < width; i++)
+                for (int i = 0; i < Width; i++)
                 {
-                    for (int j = 0; j < height; j++)
+                    for (int j = 0; j < Height; j++)
                     {
                         SetColor = 0;
-                        ft = i * 255 / (width - 1);
-                        rg = j * 255 / (height - 1);
+                        ft = i * 255 / (Width - 1);
+                        rg = j * 255 / (Height - 1);
                         switch (GivenChannel)
                         {
                             case 1:
                                 SetColor = HSV.ToRgbInt(new HSV(GivenHsv.H, ft, rg));
                                 break;
                             case 2:
-                                hue = j * 360 / (height - 1);
+                                hue = j * 360 / (Height - 1);
                                 SetColor = HSV.ToRgbInt(new HSV(hue, GivenHsv.S, ft));
                                 break;
                             case 3:
-                                hue = j * 360 / (height - 1);
+                                hue = j * 360 / (Height - 1);
                                 SetColor = HSV.ToRgbInt(new HSV(hue, ft, GivenHsv.V));
                                 break;
                             case 4:
@@ -209,10 +211,11 @@ namespace ColorPicker
                                 SetColor = HSV.ARGB(rg, ft, GivenColor.B);
                                 break;
                         }
-                        bp.SetPixel(i, j, SetColor);
+                        DataArray[i + j * Width] = SetColor;
+                        //bp.SetPixel(i, j, SetColor);
                     }
                 }
-                bp.Unlock();
+                bp.CopyFromArray(DataArray);
             }
         }
 
@@ -236,15 +239,17 @@ namespace ColorPicker
             int red = GivenColor.R;
             int green = GivenColor.G;
             int blue = GivenColor.B;
-            using (FastBitmapLib.FastBitmap bp = new FastBitmapLib.FastBitmap(Bitmap))
+            int Width = Bitmap.Width, Height = Bitmap.Height;
+            using (FastBitmap bp = Bitmap.FastLock())
             {
-                bp.Lock();
                 //bp.Clear(Color.White);
+                //Copy Array From Memory
+                int[] DataArray = bp.DataArray;
                 if (horizontal)
                 {
-                    for (int i = 0; i < Bitmap.Width; i++)
+                    for (int i = 0; i < Width; i++)
                     {
-                        int length = Bitmap.Width;
+                        int length = Width;
                         switch (Channel)
                         {
                             case 1://HUE
@@ -287,17 +292,18 @@ namespace ColorPicker
                                 break;
                         }
 
-                        for (int j = 0; j < Bitmap.Height; j++)
+                        for (int j = 0; j < Height; j++)
                         {
-                            bp.SetPixel(i, j, color);
+                            DataArray[i + j * Width] = color;
+                            //bp.SetPixel(i, j, color);
                         }
                     }
                 }
                 else
                 {
-                    for (int j = 0; j < Bitmap.Height; j++)
+                    for (int j = 0; j < Height; j++)
                     {
-                        int length = Bitmap.Height;
+                        int length = Height;
                         switch (Channel)
                         {
                             case 1://HUE
@@ -341,13 +347,14 @@ namespace ColorPicker
                                 break;
                         }
 
-                        for (int i = 0; i < Bitmap.Width; i++)
+                        for (int i = 0; i < Width; i++)
                         {
-                            bp.SetPixel(i, j, color);
+                            DataArray[i + j * Width] = color;
+                            // bp.SetPixel(i, j, color);
                         }
                     }
                 }
-                bp.Unlock();
+                bp.CopyFromArray(DataArray);
             }
 
         }
@@ -456,24 +463,26 @@ namespace ColorPicker
             {2,2,2,2,2 }};
             int color = LastColor.ToArgb();
             int invertcolor = Color.Black.ToArgb();
-            using (FastBitmapLib.FastBitmap bp = new FastBitmapLib.FastBitmap(Bitmap))
+            using (FastBitmap bp = Bitmap.FastLock())
             {
-                bp.Lock();
                 bp.Clear(SystemColors.Control);
-
+                //Copy Array From Memory
+                int[] DataArray = bp.DataArray;
                 for (int i = pointX; i < pointX + 5; i++)
                 {
                     for (int j = 0; j < 10; j++)
                     {
                         if (shape[j, i - pointX] == 1)
-                            bp.SetPixel(i, j, color);
+                            DataArray[i + j * Line.Width] = color;
+                        //bp.SetPixel(i, j, color);
                         if (shape[j, i - pointX] == 2)
-                            bp.SetPixel(i, j, invertcolor);
+                            DataArray[i + j * Line.Width] = invertcolor;
+                        //bp.SetPixel(i, j, invertcolor);
                     }
                 }
-                bp.Unlock();
+                bp.CopyFromArray(DataArray);
             }
-
+            
             return Bitmap;
         }
 
@@ -486,7 +495,7 @@ namespace ColorPicker
         public static Bitmap FillUp(Color Color, Size Size)
         {
             Bitmap Bitmap = new Bitmap(Size.Width, Size.Height);
-            using (FastBitmapLib.FastBitmap bp = new FastBitmapLib.FastBitmap(Bitmap))
+            using (FastBitmap bp = new FastBitmap(Bitmap))
             {
                 bp.Lock();
                 bp.Clear(Color);
@@ -512,11 +521,9 @@ namespace ColorPicker
                 pt.Y = HSVRGB.Height;
 
             Color c;
-            using (FastBitmapLib.FastBitmap fb = new FastBitmapLib.FastBitmap(HSVRGB))
+            using (FastBitmap fb = HSVRGB.FastLock())
             {
-                fb.Lock();
                 c = fb.GetPixel(pt.X, pt.Y);
-                fb.Unlock();
             }
             return c;
         }

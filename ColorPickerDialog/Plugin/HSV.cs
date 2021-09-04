@@ -7,7 +7,7 @@
 using System;
 using System.Drawing;
 
-namespace ColorPicker.Plugin
+namespace FastBitmapLib
 {
     public struct HSV
     {
@@ -197,6 +197,128 @@ namespace ColorPicker.Plugin
             return HSV.ARGB(r, g, b);
         }
 
+        /// <summary>
+        /// 色相 (Hue) 0~360
+        /// </summary>
+        /// <param name="rgb"></param>
+        /// <returns>Hue 0~360</returns>
+        public static int HueOnly(Color rgb)
+        {
+            return HueOnly(rgb.R, rgb.G, rgb.B);
+        }
+
+        /// <summary>
+        /// 色相 (Hue) 0~360
+        /// </summary>
+        /// <param name="rgb">Color</param>
+        /// <returns>Hue 0~360</returns>
+        public static int HueOnly(int rgb)
+        {
+            return HueOnly((byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb);
+        }
+
+        /// <summary>
+        /// 色相 (Hue) 0~360
+        /// </summary>
+        /// <param name="R">Red:0~255</param>
+        /// <param name="G">Green:0~255</param>
+        /// <param name="B">Blue:0~255</param>
+        /// <returns>Hue 0~360</returns>
+        public static int HueOnly(byte R,byte G,byte B)
+        {
+            byte max = Math.Max(R, Math.Max(G, B));
+            byte min = Math.Min(R, Math.Min(G, B));
+
+            int hue, chroma = max - min;
+
+            if (chroma == 0)
+                hue = 0;
+            else if (max == R)
+                hue = 60 * (G - B) / chroma;
+            else if (max == G)
+                hue = 60 * (B - R) / chroma + 120;
+            else if (max == B)
+                hue = 60 * (R - G) / chroma + 240;
+            else
+                hue = 0;
+
+            if (hue < 0)
+                hue += 360;
+            return hue;
+        }
+
+        /// <summary>
+        /// 彩度 (Saturation) 0~255 (0~100%)
+        /// </summary>
+        /// <param name="rgb">Color</param>
+        /// <returns>Saturation 0~255</returns>
+        public static int SaturationOnly(Color rgb)
+        {
+            return SaturationOnly(rgb.R, rgb.G, rgb.B);
+        }
+
+        /// <summary>
+        /// 彩度 (Saturation) 0~255 (0~100%)
+        /// </summary>
+        /// <param name="rgb">Color</param>
+        /// <returns>Saturation 0~255</returns>
+        public static int SaturationOnly(int rgb)
+        {
+            return SaturationOnly((byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb);
+        }
+
+        /// <summary>
+        /// 彩度 (Saturation) 0~255 (0~100%)
+        /// </summary>
+        /// <param name="R">Red:0~255</param>
+        /// <param name="G">Green:0~255</param>
+        /// <param name="B">Blue:0~255</param>
+        /// <returns>Saturation 0~255</returns>
+        public static int SaturationOnly(byte R, byte G, byte B)
+        {
+            byte max = Math.Max(R, Math.Max(G, B));
+            byte min = Math.Min(R, Math.Min(G, B));
+
+            int chroma = max - min;
+
+            if (max == 0)
+                return 0;
+            else
+                return chroma * 0xff / max;
+        }
+
+        /// <summary>
+        /// 明度 (Value, Brightness) 0~255 (0~100%)
+        /// </summary>
+        /// <param name="rgb">Color</param>
+        /// <returns>Value 0~255</returns>
+        public static int ValueOnly(Color rgb)
+        {
+            return ValueOnly(rgb.R, rgb.G, rgb.B);
+        }
+
+        /// <summary>
+        /// 明度 (Value, Brightness) 0~255 (0~100%)
+        /// </summary>
+        /// <param name="rgb">Color</param>
+        /// <returns>Value 0~255</returns>
+        public static int ValueOnly(int rgb)
+        {
+            return ValueOnly((byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb);
+        }
+        /// <summary>
+        /// 明度 (Value, Brightness) 0~255 (0~100%)
+        /// </summary>
+        /// <param name="R">Red:0~255</param>
+        /// <param name="G">Green:0~255</param>
+        /// <param name="B">Blue:0~255</param>
+        /// <returns>Value 0~255</returns>
+        public static int ValueOnly(byte R, byte G, byte B)
+        {
+            return Math.Max(R, Math.Max(G, B));
+        }
+
+   
         /// <summary>
         /// 附加功能：将RGB三种颜色组合成一个int形态的Color
         /// </summary>

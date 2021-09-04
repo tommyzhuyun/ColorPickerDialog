@@ -8,10 +8,10 @@
  *  2021.8.22
  */
 
-using ColorPicker.Plugin;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using FastBitmapLib;
 
 
 namespace ColorPicker

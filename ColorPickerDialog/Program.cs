@@ -21,7 +21,7 @@ namespace ColorPickerDialog
             if (cp.ShowDialog() == DialogResult.OK)
             {
                 Picker = cp.SetColor;
-                Console.WriteLine(ColorPicker.Plugin.HSV.HTMLString(Picker));
+                Console.WriteLine(FastBitmapLib.HSV.HTMLString(Picker));
             }
             cp?.Dispose();
 
