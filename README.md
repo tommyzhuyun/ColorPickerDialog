@@ -23,7 +23,7 @@ if (cp.ShowDialog() == DialogResult.OK)
     // 保存你获得的颜色
     Picker = cp.SetColor;
     // 转换颜色为 HTML 代码，比如 #FF0000 (Red)
-    Console.WriteLine(ColorPicker.Plugin.HSV.HTMLString(Picker));
+    Console.WriteLine(FastBitmapLib.HSV.HTMLString(Picker));
 }
 // 释放内存，避免内存泄漏
 cp?.Dispose();
