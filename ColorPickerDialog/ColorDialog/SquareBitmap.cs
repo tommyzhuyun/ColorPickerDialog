@@ -343,7 +343,7 @@ namespace ColorPicker
         /// After Using This, you need to Dispose it.
         /// </summary>
         /// <returns>返回有内接圆的图像</returns>
-        public static Bitmap ColorBox(Bitmap HSVRGB, HSV LastHsv, Color LastColor, HsvRgb LastChannel)
+        public Bitmap ColorBox()
         {
             Rectangle rect = new Rectangle(-6, -6, 12, 12);//内接圆的正方形大小
             Bitmap ColorBox = (Bitmap)HSVRGB.Clone();
