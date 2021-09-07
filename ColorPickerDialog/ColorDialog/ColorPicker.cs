@@ -24,7 +24,7 @@ namespace ColorPicker
         public string RGBstring { private set; get; }
 
         private SquareBitmap sbmp;
-        private byte LastChannel, GivenChannel;
+        private HsvRgb LastChannel, GivenChannel;
         private bool isSettingValue = false;
 
         #region 窗体设计
@@ -36,7 +36,7 @@ namespace ColorPicker
         {
             InitializeComponent();
             this.GivenColor = Color;
-            this.GivenChannel = this.LastChannel = SquareBitmap.HUE;
+            this.GivenChannel = this.LastChannel = HsvRgb.Hue;
         }
 
         private void ColorPicker_Load(object sender, EventArgs e)
@@ -125,27 +125,27 @@ namespace ColorPicker
             this.BlueLine.Refresh();
 
             this.PointH.Image?.Dispose();
-            this.PointH.Image = sbmp.ColorLinePointer(this.PointH.Size, SquareBitmap.HUE);
+            this.PointH.Image = sbmp.ColorLinePointer(this.PointH.Size, HsvRgb.Hue);
             this.PointH.Refresh();
 
             this.PointS.Image?.Dispose();
-            this.PointS.Image = sbmp.ColorLinePointer(this.PointS.Size, SquareBitmap.SATURATION);
+            this.PointS.Image = sbmp.ColorLinePointer(this.PointS.Size, HsvRgb.Saturation);
             this.PointS.Refresh();
 
             this.PointV.Image?.Dispose();
-            this.PointV.Image = sbmp.ColorLinePointer(this.PointV.Size, SquareBitmap.VALUE);
+            this.PointV.Image = sbmp.ColorLinePointer(this.PointV.Size, HsvRgb.Value);
             this.PointV.Refresh();
 
             this.PointR.Image?.Dispose();
-            this.PointR.Image = sbmp.ColorLinePointer(this.PointR.Size, SquareBitmap.RED);
+            this.PointR.Image = sbmp.ColorLinePointer(this.PointR.Size, HsvRgb.Red);
             this.PointR.Refresh();
 
             this.PointG.Image?.Dispose();
-            this.PointG.Image = sbmp.ColorLinePointer(this.PointG.Size, SquareBitmap.GREEN);
+            this.PointG.Image = sbmp.ColorLinePointer(this.PointG.Size, HsvRgb.Green);
             this.PointG.Refresh();
 
             this.PointB.Image?.Dispose();
-            this.PointB.Image = sbmp.ColorLinePointer(this.PointB.Size, SquareBitmap.BLUE);
+            this.PointB.Image = sbmp.ColorLinePointer(this.PointB.Size, HsvRgb.Blue);
             this.PointB.Refresh();
 
             isSettingValue = false;
@@ -165,7 +165,7 @@ namespace ColorPicker
                 HR.Text = "H";
                 SG.Text = "S";
                 VB.Text = "V";
-                LastChannel = SquareBitmap.HUE;
+                LastChannel = HsvRgb.Hue;
             }
             else
             {
@@ -173,7 +173,7 @@ namespace ColorPicker
                 HR.Text = "R";
                 SG.Text = "G";
                 VB.Text = "B";
-                LastChannel = SquareBitmap.RED;
+                LastChannel = HsvRgb.Red;
             }
             HR.Checked = true;
             SG.Checked = false;
@@ -193,12 +193,12 @@ namespace ColorPicker
         {
             if (isSettingValue)
                 return;
-            if (HR.Checked && mode) GivenChannel = SquareBitmap.HUE;
-            if (SG.Checked && mode) GivenChannel = SquareBitmap.SATURATION;
-            if (VB.Checked && mode) GivenChannel = SquareBitmap.VALUE;
-            if (HR.Checked && !mode) GivenChannel = SquareBitmap.RED;
-            if (SG.Checked && !mode) GivenChannel = SquareBitmap.GREEN;
-            if (VB.Checked && !mode) GivenChannel = SquareBitmap.BLUE;
+            if (HR.Checked && mode) GivenChannel = HsvRgb.Hue;
+            if (SG.Checked && mode) GivenChannel = HsvRgb.Saturation;
+            if (VB.Checked && mode) GivenChannel = HsvRgb.Value;
+            if (HR.Checked && !mode) GivenChannel = HsvRgb.Red;
+            if (SG.Checked && !mode) GivenChannel = HsvRgb.Green;
+            if (VB.Checked && !mode) GivenChannel = HsvRgb.Blue;
 
             if (LastChannel != GivenChannel)
             {
@@ -356,36 +356,36 @@ namespace ColorPicker
         {
             switch (LastChannel)
             {
-                case 1:
+                case HsvRgb.Hue:
                     SetHSV = new HSV(SetHSV.H, pt.X, pt.Y);
                     break;
-                case 2:
+                case HsvRgb.Saturation:
                     SetHSV = new HSV(pt.Y * 360 / 255, SetHSV.S, pt.X);
                     break;
-                case 3:
+                case HsvRgb.Value:
                     SetHSV = new HSV(pt.Y * 360 / 255, pt.X, SetHSV.V);
                     break;
-                case 4:
+                case HsvRgb.Red:
                     SetColor = Color.FromArgb(SetColor.R, pt.X, pt.Y);
                     break;
-                case 5:
+                case HsvRgb.Green:
                     SetColor = Color.FromArgb(pt.Y, SetColor.G, pt.X);
                     break;
-                case 6:
+                case HsvRgb.Blue:
                     SetColor = Color.FromArgb(pt.Y, pt.X, SetColor.B);
                     break;
             }
             switch (LastChannel)
             {
-                case 1:
-                case 2:
-                case 3:
+                case HsvRgb.Hue:
+                case HsvRgb.Saturation:
+                case HsvRgb.Value:
                     SetColor = HSV.ToRgb(SetHSV);
                     sbmp.UpDate(SetHSV, LastChannel);
                     break;
-                case 4:
-                case 5:
-                case 6:
+                case HsvRgb.Red:
+                case HsvRgb.Green:
+                case HsvRgb.Blue:
                     SetHSV = HSV.FromRgb(SetColor);
                     sbmp.UpDate(SetColor, LastChannel);
                     break;
@@ -415,22 +415,22 @@ namespace ColorPicker
                     pt.Y = ((PictureBox)sender).Height - 1;
                 switch (LastChannel)
                 {
-                    case 1:
+                    case HsvRgb.Hue:
                         UpDownH.Value = pt.Y * 360 / 255;
                         break;
-                    case 2:
+                    case HsvRgb.Saturation:
                         UpDownS.Value = pt.Y;
                         break;
-                    case 3:
+                    case HsvRgb.Value:
                         UpDownV.Value = pt.Y;
                         break;
-                    case 4:
+                    case HsvRgb.Red:
                         UpDownR.Value = pt.Y;
                         break;
-                    case 5:
+                    case HsvRgb.Green:
                         UpDownG.Value = pt.Y;
                         break;
-                    case 6:
+                    case HsvRgb.Blue:
                         UpDownB.Value = pt.Y;
                         break;
                 }
