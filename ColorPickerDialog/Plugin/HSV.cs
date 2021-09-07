@@ -9,6 +9,17 @@ using System.Drawing;
 
 namespace FastBitmapLib
 {
+    public enum HsvRgb
+    {
+        Hue,
+        Saturation,
+        Value,
+        Brightness,
+        Red,
+        Green,
+        Blue
+    }
+
     public struct HSV
     {
         /// <summary>
@@ -109,7 +120,6 @@ namespace FastBitmapLib
 
             int value = max, hue, saturation;
             int chroma = max - min;
-            //int lightness = value - chroma / 2;
 
             if (chroma == 0)
                 hue = 0;
@@ -224,7 +234,7 @@ namespace FastBitmapLib
         /// <param name="G">Green:0~255</param>
         /// <param name="B">Blue:0~255</param>
         /// <returns>Hue 0~360</returns>
-        public static int HueOnly(byte R,byte G,byte B)
+        public static int HueOnly(byte R, byte G, byte B)
         {
             byte max = Math.Max(R, Math.Max(G, B));
             byte min = Math.Min(R, Math.Min(G, B));
@@ -317,8 +327,40 @@ namespace FastBitmapLib
         {
             return Math.Max(R, Math.Max(G, B));
         }
+        /// <summary>
+        /// 明度 (Value, Brightness) 0~255 (0~100%)
+        /// </summary>
+        /// <param name="rgb">Color</param>
+        /// <returns>Value 0~255</returns>
+        public static int BrightnessOnly(Color rgb)
+        {
+            return BrightnessOnly(rgb.R, rgb.G, rgb.B);
+        }
 
-   
+        /// <summary>
+        /// 明度 (Value, Brightness) 0~255 (0~100%)
+        /// </summary>
+        /// <param name="rgb">Color</param>
+        /// <returns>Value 0~255</returns>
+        public static int BrightnessOnly(int rgb)
+        {
+            return BrightnessOnly((byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb);
+        }
+        /// <summary>
+        /// 明度 (Value, Brightness) 0~255 (0~100%)
+        /// </summary>
+        /// <param name="R">Red:0~255</param>
+        /// <param name="G">Green:0~255</param>
+        /// <param name="B">Blue:0~255</param>
+        /// <returns>Value 0~255</returns>
+        public static int BrightnessOnly(byte R, byte G, byte B)
+        {
+            byte max = Math.Max(R, Math.Max(G, B));
+            byte min = Math.Min(R, Math.Min(G, B));
+            return (max + min) / 2;
+        }
+
+
         /// <summary>
         /// 附加功能：将RGB三种颜色组合成一个int形态的Color
         /// </summary>
