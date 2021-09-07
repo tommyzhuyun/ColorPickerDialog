@@ -157,19 +157,18 @@ namespace ColorPicker
         /// <summary>
         /// 正方形颜色面板
         /// </summary>
-        private void UpColorPlate()
+        public void UpColorPlate()
         {
             int Width = HSVRGB.Width;
             int Height = HSVRGB.Height;
 
             int[] DataArray = new int[Width * Height];
             int ft, rg, hue;
-            int SetColor;
+            int SetColor = 0;
             for (int i = 0; i < Width; i++)
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    SetColor = 0;
                     ft = i * 255 / (Width - 1);
                     rg = j * 255 / (Height - 1);
                     switch (GivenChannel)
@@ -210,7 +209,7 @@ namespace ColorPicker
         /// <param name="Bitmap">颜色条的Bitmap指针</param>
         /// <param name="Channel">HUE, SATURATION, VALUE, RED, GREEN, BLUE</param>
         /// <param name="horizontal">横条还是竖条</param>
-        private void UpColorLine(Bitmap Bitmap, HsvRgb Channel, bool horizontal)
+        public void UpColorLine(Bitmap Bitmap, HsvRgb Channel, bool horizontal)
         {
             int Hue = GivenHsv.H;
             int Sat = GivenHsv.S;
