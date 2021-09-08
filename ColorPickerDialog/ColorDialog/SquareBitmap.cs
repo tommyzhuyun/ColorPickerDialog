@@ -4,7 +4,7 @@
  *  @HSV.cs
  *  @SquareBitmap.cs
  *  Version 1.1
- *  2021.8.22
+ *  2021.9.9
  */
 
 using FastBitmapLib;
@@ -434,9 +434,9 @@ namespace ColorPicker
             using (Pen p = new Pen(Color.FromArgb(LastColor.ToArgb() ^ 0xffffff), 2))//相对色，1像素
             {
                 g.DrawImage(HSVRGB, new Point(0, 0));
+
                 g.TranslateTransform(pt.X, pt.Y);//变更圆的原点位置
                 g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;//抗锯齿
-
                 g.DrawEllipse(p, rect);//给定的正方形内画内接圆
             }
 

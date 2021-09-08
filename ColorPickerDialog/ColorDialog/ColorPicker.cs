@@ -5,7 +5,7 @@
  *  @HSV.cs
  *  @SquareBitmap.cs
  *  Version 1.1
- *  2021.8.22
+ *  2021.9.9
  */
 
 using FastBitmapLib;
