@@ -26,7 +26,5 @@ if (cp.ShowDialog() == DialogResult.OK)
     // 转换颜色为 HTML 代码，比如 #FF0000 (Red)
     Console.WriteLine(FastBitmapLib.HSV.HTMLString(Picker));
 }
-// 释放内存，避免内存泄漏
-cp?.Dispose();
 ```
 
