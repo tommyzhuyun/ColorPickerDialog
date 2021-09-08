@@ -51,7 +51,7 @@ namespace ColorPicker
 
             UpDate();
             sbmp.UpDate(SetColor, LastChannel);
-            ImageUpdate();
+            ImageUpdate(true);
         }
         #endregion
 
@@ -87,65 +87,54 @@ namespace ColorPicker
         /// 同步更新图像
         /// </summary>
         /// <param name="init">是否为初始化的判断</param>
-        private void ImageUpdate()
+        private void ImageUpdate(bool init)
         {
             isSettingValue = true;
-            //Console.WriteLine("Update:" + LastChannel);
+            if (init)
+            {
+                this.BoardMode.Image = sbmp.BoardLiner;
+                this.HueLine.Image = sbmp.HueLiner;
+                this.SatLine.Image = sbmp.SatLiner;
+                this.ValLine.Image = sbmp.ValLiner;
+                this.RedLine.Image = sbmp.RedLiner;
+                this.GreenLine.Image = sbmp.GreenLiner;
+                this.BlueLine.Image = sbmp.BlueLiner;
+
+                this.PointH.Image = new Bitmap(this.PointH.Width, this.PointH.Height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                this.PointS.Image = new Bitmap(this.PointS.Width, this.PointS.Height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                this.PointV.Image = new Bitmap(this.PointV.Width, this.PointV.Height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                this.PointR.Image = new Bitmap(this.PointR.Width, this.PointR.Height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                this.PointG.Image = new Bitmap(this.PointG.Width, this.PointG.Height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                this.PointB.Image = new Bitmap(this.PointB.Width, this.PointB.Height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+            }
 
             this.ColorBox.Image?.Dispose();
-            this.ColorBox.Image = (Image)sbmp.ColorBox();
+            this.ColorBox.Image = sbmp.ColorBox();
             this.ColorBox.Refresh();
-
-            this.BoardMode.Image?.Dispose();
-            this.BoardMode.Image = (Image)sbmp.BoardLiner.Clone();
             this.BoardMode.Refresh();
-
-            this.HueLine.Image?.Dispose();
-            this.HueLine.Image = (Image)sbmp.HueLiner.Clone();
             this.HueLine.Refresh();
-
-            this.SatLine.Image?.Dispose();
-            this.SatLine.Image = (Image)sbmp.SatLiner.Clone();
             this.SatLine.Refresh();
-
-            this.ValLine.Image?.Dispose();
-            this.ValLine.Image = (Image)sbmp.ValLiner.Clone();
             this.ValLine.Refresh();
-
-            this.RedLine.Image?.Dispose();
-            this.RedLine.Image = (Image)sbmp.RedLiner.Clone();
             this.RedLine.Refresh();
-
-            this.GreenLine.Image?.Dispose();
-            this.GreenLine.Image = (Image)sbmp.GreenLiner.Clone();
             this.GreenLine.Refresh();
-
-            this.BlueLine.Image?.Dispose();
-            this.BlueLine.Image = (Image)sbmp.BlueLiner.Clone();
             this.BlueLine.Refresh();
-
-            this.PointH.Image?.Dispose();
-            this.PointH.Image = sbmp.ColorLinePointer(this.PointH.Size, HsvRgb.Hue);
+            
+            sbmp.ColorLinePointer((Bitmap)this.PointH.Image, HsvRgb.Hue);
             this.PointH.Refresh();
-
-            this.PointS.Image?.Dispose();
-            this.PointS.Image = sbmp.ColorLinePointer(this.PointS.Size, HsvRgb.Saturation);
+            
+            sbmp.ColorLinePointer((Bitmap)this.PointS.Image, HsvRgb.Saturation);
             this.PointS.Refresh();
 
-            this.PointV.Image?.Dispose();
-            this.PointV.Image = sbmp.ColorLinePointer(this.PointV.Size, HsvRgb.Value);
+            sbmp.ColorLinePointer((Bitmap)this.PointV.Image, HsvRgb.Value);
             this.PointV.Refresh();
 
-            this.PointR.Image?.Dispose();
-            this.PointR.Image = sbmp.ColorLinePointer(this.PointR.Size, HsvRgb.Red);
+            sbmp.ColorLinePointer((Bitmap)this.PointR.Image, HsvRgb.Red);
             this.PointR.Refresh();
 
-            this.PointG.Image?.Dispose();
-            this.PointG.Image = sbmp.ColorLinePointer(this.PointG.Size, HsvRgb.Green);
+            sbmp.ColorLinePointer((Bitmap)this.PointG.Image, HsvRgb.Green);
             this.PointG.Refresh();
 
-            this.PointB.Image?.Dispose();
-            this.PointB.Image = sbmp.ColorLinePointer(this.PointB.Size, HsvRgb.Blue);
+            sbmp.ColorLinePointer((Bitmap)this.PointB.Image, HsvRgb.Blue);
             this.PointB.Refresh();
 
             isSettingValue = false;
@@ -187,7 +176,7 @@ namespace ColorPicker
 
             UpDate();
             sbmp.UpDate(SetColor, LastChannel);
-            ImageUpdate();
+            ImageUpdate(false);
         }
         private void CheckedChanged(object sender, EventArgs e)
         {
@@ -205,7 +194,7 @@ namespace ColorPicker
                 LastChannel = GivenChannel;
                 UpDate();
                 sbmp.UpDate(SetColor, LastChannel);
-                ImageUpdate();
+                ImageUpdate(false);
             }
         }
         #endregion
@@ -221,7 +210,7 @@ namespace ColorPicker
 
             UpDate();
             sbmp.UpDate(SetColor, LastChannel);
-            ImageUpdate();
+            ImageUpdate(false);
         }
         private void Apply_Click(object sender, EventArgs e)
         {
@@ -265,7 +254,7 @@ namespace ColorPicker
 
                 UpDate();
                 sbmp.UpDate(SetColor, LastChannel);
-                ImageUpdate();
+                ImageUpdate(false);
             }
             HTML.Select(Right, 0);
         }
@@ -278,7 +267,7 @@ namespace ColorPicker
 
             UpDate();
             sbmp.UpDate(SetHSV, LastChannel);
-            ImageUpdate();
+            ImageUpdate(false);
         }
 
         private void RGB_ValueChanged(object sender, EventArgs e)
@@ -290,7 +279,7 @@ namespace ColorPicker
 
             UpDate();
             sbmp.UpDate(SetColor, LastChannel);
-            ImageUpdate();
+            ImageUpdate(false);
         }
         #endregion
 
@@ -391,7 +380,7 @@ namespace ColorPicker
                     break;
             }
             UpDate();
-            ImageUpdate();
+            ImageUpdate(false);
         }
         private void LineMouseChannel(object sender, Point pt)
         {

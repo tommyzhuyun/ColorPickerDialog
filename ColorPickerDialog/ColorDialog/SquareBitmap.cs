@@ -394,15 +394,17 @@ namespace ColorPicker
         /// <param name="Line">Height should be 10. Width should be 360+4 or 256+4</param>
         /// <param name="channel">HUE, SATURATION, VALUE, RED, GREEN, BLUE</param>
         /// <returns>与长方形颜色选择条图像相对应的指针信息（横向）</returns>
-        public Bitmap ColorLinePointer(Size Line, HsvRgb channel)
+        public void ColorLinePointer(Bitmap Bitmap, HsvRgb channel)
         {
-            Bitmap Bitmap = new Bitmap(Line.Width, Line.Height);
+            int Width = Bitmap.Width;
+            int Height = Bitmap.Height;
 
-            if (Bitmap.Height != 10 ||
+            if (Height != 10 ||
                 (channel == HsvRgb.Brightness) ||
-                (channel != HsvRgb.Hue && Line.Width != 256 + 4) ||
-                (channel == HsvRgb.Hue && Line.Width != 361 + 4))
-                return Bitmap;
+                (channel != HsvRgb.Hue && Width != 256 + 4) ||
+                (channel == HsvRgb.Hue && Width != 361 + 4))
+                return;
+            
 
             int pointX = 0;
             switch (channel)
@@ -442,7 +444,7 @@ namespace ColorPicker
             int invertcolor = Color.Black.ToArgb();
 
             //Copy Array To Memory
-            int[] DataArray = new int[Line.Width * Line.Height];
+            int[] DataArray = new int[Width * Height];
             int ControlColor = SystemColors.Control.ToArgb();
             for (int i = 0; i < DataArray.Length; i++)
                 DataArray[i] = ControlColor;
@@ -452,17 +454,15 @@ namespace ColorPicker
                 for (int j = 0; j < 10; j++)
                 {
                     if (shape[j, i - pointX] == 1)
-                        DataArray[i + j * Line.Width] = color;
+                        DataArray[i + j * Width] = color;
                     if (shape[j, i - pointX] == 2)
-                        DataArray[i + j * Line.Width] = invertcolor;
+                        DataArray[i + j * Width] = invertcolor;
                 }
             }
             using (FastBitmap bp = Bitmap.FastLock())
             {
                 bp.CopyFromArray(DataArray);
             }
-            
-            return Bitmap;
         }
 
         /// <summary>
