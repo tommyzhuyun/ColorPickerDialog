@@ -57,9 +57,7 @@ namespace ColorPicker
         /// <summary>
         /// 初始化: 无图
         /// </summary>
-        /// <param name="hsv">指定初始化的颜色</param>
-        /// <param name="channel">HUE, SATURATION, VALUE, RED, GREEN, BLUE</param>
-        /// <param name="ColorBoard">正方形的颜色面板</param>
+        /// <param name="hsv">指定初始化的HSV</param>
         public SquareBitmap(HSV hsv)
         {
             this.GivenHsv = this.LastHsv = hsv;
@@ -72,9 +70,7 @@ namespace ColorPicker
         /// <summary>
         /// 初始化: 无图
         /// </summary>
-        /// <param name="hsv">指定初始化的颜色</param>
-        /// <param name="channel">HUE, SATURATION, VALUE, RED, GREEN, BLUE</param>
-        /// <param name="ColorBoard">正方形的颜色面板</param>
+        /// <param name="color">指定初始化的Color</param>
         public SquareBitmap(Color color)
         {
             this.GivenColor = this.LastColor = color;
@@ -88,9 +84,8 @@ namespace ColorPicker
         /// <summary>
         /// 初始化: 无图
         /// </summary>
-        /// <param name="hsv">指定初始化的颜色</param>
-        /// <param name="channel">HUE, SATURATION, VALUE, RED, GREEN, BLUE</param>
-        /// <param name="ColorBoard">正方形的颜色面板</param>
+        /// <param name="color">指定初始化的Color</param>
+        /// <param name="hsv">指定初始化的HSV</param>
         public SquareBitmap(Color color, HSV hsv)
         {
             this.GivenColor = this.LastColor = color;
@@ -109,6 +104,9 @@ namespace ColorPicker
             HSVRGB?.Dispose();
         }
 
+        /// <summary>
+        /// Dispose This
+        /// </summary>
         ~SquareBitmap()
         {
             Dispose();
@@ -144,6 +142,7 @@ namespace ColorPicker
         /// <summary>
         /// 更新颜色板3
         /// </summary>
+        /// <param name="color">指定初始化的Color</param>
         /// <param name="hsv">指定初始化的HSV</param>
         /// <param name="channel">HUE, SATURATION, VALUE, RED, GREEN, BLUE</param>
         public void UpDate(Color color, HSV hsv, HsvRgb channel)
@@ -156,6 +155,7 @@ namespace ColorPicker
         /// <summary>
         /// 正式刷新Bitmap
         /// </summary>
+        /// <param name="init">初始化flag</param>
         private void UpDate(bool init)
         {
             bool ChangeAbility = false;
@@ -191,14 +191,20 @@ namespace ColorPicker
         #endregion
 
         #region 更新图像
+        /// <summary>
+        /// 生成新的正方形颜色面板，之后你需要UpColorPlate
+        /// </summary>
+        /// <param name="ColorBoard">正方形颜色板的尺寸</param>
         public void CreateColorPlate(Size ColorBoard)
         {
+            this.HSVRGB?.Dispose();
             this.HSVRGB = new Bitmap(ColorBoard.Width, ColorBoard.Height, PixelFormat.Format32bppPArgb);
         }
 
         /// <summary>
-        /// 正方形颜色面板
+        /// 更新正方形颜色面板
         /// </summary>
+        /// <param name="HSVRGB">需要覆盖的图像</param>
         public void UpColorPlate(Bitmap HSVRGB)
         {
             int Width = HSVRGB.Width;
@@ -380,7 +386,7 @@ namespace ColorPicker
         }
 
         /// <summary>
-        ///  After Using This, you need to Dispose it.
+        /// 限制性较高的图像定位指针，需要大小固定
         /// </summary>
         /// <param name="Bitmap">Height should be 10. Width should be 360+4 or 256+4</param>
         /// <param name="channel">HUE, SATURATION, VALUE, RED, GREEN, BLUE</param>
@@ -457,9 +463,9 @@ namespace ColorPicker
 
         #region 返回结果图像
         /// <summary>
-        /// After Using This, you need to Dispose it.
+        /// 获取带有圆圈定位的图像
         /// </summary>
-        /// <returns>返回有内接圆的图像</returns>
+        /// <param name="ColorBox">需要覆盖的图像</param>
         public void ColorBox(Image ColorBox)
         {
             Rectangle rect = new Rectangle(-6, -6, 12, 12);//内接圆的正方形大小
