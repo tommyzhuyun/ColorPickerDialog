@@ -55,6 +55,22 @@ namespace ColorPicker
         }
 
         /// <summary>
+        /// 初始化: 无图
+        /// </summary>
+        /// <param name="hsv">指定初始化的颜色</param>
+        /// <param name="channel">HUE, SATURATION, VALUE, RED, GREEN, BLUE</param>
+        /// <param name="ColorBoard">正方形的颜色面板</param>
+        public SquareBitmap(HSV hsv, HsvRgb channel)
+        {
+            this.GivenHsv = this.LastHsv = hsv;
+            this.GivenColor = this.LastColor = HSV.ToRgb(hsv);
+            this.GivenChannel = this.LastChannel = channel;
+
+            this.HSVRGB = null;
+            UpDate(true);
+        }
+
+        /// <summary>
         /// Dispose all Bitmap
         /// </summary>
         public void Dispose()
@@ -122,7 +138,7 @@ namespace ColorPicker
                     break;
             }
 
-            if (GivenChannel != LastChannel || ChangeAbility || init)
+            if ((GivenChannel != LastChannel || ChangeAbility || init) && HSVRGB != null)
                 UpColorPlate(HSVRGB);
 
             this.LastChannel = this.GivenChannel;
@@ -449,6 +465,7 @@ namespace ColorPicker
         /// <returns>返回取色框内的颜色</returns>
         public Color SetColorBox(Point pt)
         {
+            if (HSVRGB == null) throw new NullReferenceException("ColorBoard is Not be seted");
             if (pt.X < 0)
                 pt.X = 0;
             if (pt.X > HSVRGB.Width)
