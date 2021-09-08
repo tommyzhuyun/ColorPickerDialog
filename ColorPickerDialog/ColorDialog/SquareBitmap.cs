@@ -3,15 +3,14 @@
  *  找色专用面板中的各个显示模块
  *  @HSV.cs
  *  @SquareBitmap.cs
- *  Version 1.0
+ *  Version 1.1
  *  2021.8.22
  */
 
+using FastBitmapLib;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using FastBitmapLib;
-
 
 
 namespace ColorPicker
@@ -22,39 +21,36 @@ namespace ColorPicker
         private Color GivenColor, LastColor;
         private HsvRgb GivenChannel, LastChannel;
         public Bitmap HSVRGB { private set; get; }
-        public Bitmap BoardLiner { private set; get; }
-        public Bitmap HueLiner { private set; get; }
-        public Bitmap SatLiner { private set; get; }
-        public Bitmap ValLiner { private set; get; }
-        public Bitmap RedLiner { private set; get; }
-        public Bitmap GreenLiner { private set; get; }
-        public Bitmap BlueLiner { private set; get; }
-
 
         /// <summary>
         /// 初始化
         /// </summary>
         /// <param name="color">指定初始化的颜色</param>
         /// <param name="channel">HUE, SATURATION, VALUE, RED, GREEN, BLUE</param>
-        /// <param name="HsvRgb">正方形的颜色面板</param>
-        /// <param name="BoardLine">颜色面板用于改变基准色的颜色线条</param>
-        /// <param name="HueLine">0~360长度的颜色线条</param>
-        /// <param name="OtherLine">0~255长度的颜色线条</param>
-        public SquareBitmap(Color color, HsvRgb channel, Size HsvRgb, Size BoardLine, Size HueLine, Size OtherLine)
+        /// <param name="ColorBoard">正方形的颜色面板</param>
+        public SquareBitmap(Color color, HsvRgb channel, Size ColorBoard)
         {
             this.GivenColor = this.LastColor = color;
             this.GivenHsv = this.LastHsv = HSV.FromRgb(GivenColor);
             this.GivenChannel = this.LastChannel = channel;
 
-            this.HSVRGB = new Bitmap(HsvRgb.Width, HsvRgb.Height, PixelFormat.Format32bppPArgb);
-            this.BoardLiner = new Bitmap(BoardLine.Width, BoardLine.Height, PixelFormat.Format32bppPArgb);
-            this.HueLiner = new Bitmap(HueLine.Width, HueLine.Height, PixelFormat.Format32bppPArgb);
-            this.SatLiner = new Bitmap(OtherLine.Width, OtherLine.Height, PixelFormat.Format32bppPArgb);
-            this.ValLiner = new Bitmap(OtherLine.Width, OtherLine.Height, PixelFormat.Format32bppPArgb);
-            this.RedLiner = new Bitmap(OtherLine.Width, OtherLine.Height, PixelFormat.Format32bppPArgb);
-            this.GreenLiner = new Bitmap(OtherLine.Width, OtherLine.Height, PixelFormat.Format32bppPArgb);
-            this.BlueLiner = new Bitmap(OtherLine.Width, OtherLine.Height, PixelFormat.Format32bppPArgb);
+            this.HSVRGB = new Bitmap(ColorBoard.Width, ColorBoard.Height, PixelFormat.Format32bppPArgb);
+            UpDate(true);
+        }
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <param name="hsv">指定初始化的颜色</param>
+        /// <param name="channel">HUE, SATURATION, VALUE, RED, GREEN, BLUE</param>
+        /// <param name="ColorBoard">正方形的颜色面板</param>
+        public SquareBitmap(HSV hsv, HsvRgb channel, Size ColorBoard)
+        {
+            this.GivenHsv = this.LastHsv = hsv;
+            this.GivenColor = this.LastColor = HSV.ToRgb(hsv);
+            this.GivenChannel = this.LastChannel = channel;
+
+            this.HSVRGB = new Bitmap(ColorBoard.Width, ColorBoard.Height, PixelFormat.Format32bppPArgb);
             UpDate(true);
         }
 
@@ -64,13 +60,11 @@ namespace ColorPicker
         public void Dispose()
         {
             HSVRGB?.Dispose();
-            BoardLiner?.Dispose();
-            HueLiner?.Dispose();
-            SatLiner?.Dispose();
-            ValLiner?.Dispose();
-            RedLiner?.Dispose();
-            GreenLiner?.Dispose();
-            BlueLiner?.Dispose();
+        }
+
+        ~SquareBitmap()
+        {
+            Dispose();
         }
 
         #region 更新内容
@@ -86,6 +80,7 @@ namespace ColorPicker
             this.GivenHsv = HSV.FromRgb(GivenColor);
             UpDate(false);
         }
+
         /// <summary>
         /// 更新颜色板2
         /// </summary>
@@ -98,10 +93,7 @@ namespace ColorPicker
             this.GivenColor = HSV.ToRgb(GivenHsv);
             UpDate(false);
         }
-        #endregion
 
-
-        #region 自我刷新内容(private)
         /// <summary>
         /// 正式刷新Bitmap
         /// </summary>
@@ -131,31 +123,19 @@ namespace ColorPicker
             }
 
             if (GivenChannel != LastChannel || ChangeAbility || init)
-                UpColorPlate(HSVRGB, GivenHsv, GivenColor, GivenChannel);
-
-            UpColorLine(BoardLiner, GivenHsv, GivenColor, GivenChannel, false);
-
-            UpColorLine(HueLiner, GivenHsv, GivenColor, HsvRgb.Hue, true);
-
-            UpColorLine(SatLiner, GivenHsv, GivenColor, HsvRgb.Saturation, true);
-
-            UpColorLine(ValLiner, GivenHsv, GivenColor, HsvRgb.Value, true);
-
-            UpColorLine(RedLiner, GivenHsv, GivenColor, HsvRgb.Red, true);
-
-            UpColorLine(GreenLiner, GivenHsv, GivenColor, HsvRgb.Green, true);
-
-            UpColorLine(BlueLiner, GivenHsv, GivenColor, HsvRgb.Blue, true);
+                UpColorPlate(HSVRGB);
 
             this.LastChannel = this.GivenChannel;
             this.LastHsv = this.GivenHsv;
             this.LastColor = this.GivenColor;
         }
+        #endregion
 
+        #region 更新图像
         /// <summary>
         /// 正方形颜色面板
         /// </summary>
-        public static void UpColorPlate(Bitmap HSVRGB, HSV GivenHsv, Color GivenColor, HsvRgb GivenChannel)
+        public void UpColorPlate(Bitmap HSVRGB)
         {
             int Width = HSVRGB.Width;
             int Height = HSVRGB.Height;
@@ -207,15 +187,14 @@ namespace ColorPicker
         /// <param name="Bitmap">颜色条的Bitmap指针</param>
         /// <param name="Channel">HUE, SATURATION, VALUE, RED, GREEN, BLUE</param>
         /// <param name="horizontal">横条还是竖条</param>
-        public static void UpColorLine(Bitmap Bitmap, HSV GivenHsv, Color GivenColor, HsvRgb Channel, bool horizontal)
+        public void UpColorLine(Bitmap Bitmap, HsvRgb Channel, bool horizontal)
         {
             int Hue = GivenHsv.H;
             int Sat = GivenHsv.S;
             int Value = GivenHsv.V;
             if (Channel == HsvRgb.Hue && (Sat == 0 || Value == 0))
             {
-                Sat = 255;
-                Value = 255;
+                Sat = Value = 255;
             }
 
             int red = GivenColor.R;
@@ -335,63 +314,11 @@ namespace ColorPicker
                 bp.CopyFromArray(DataArray);
             }
         }
-        #endregion
-
-
-        #region 返回结果图像(复制后)
-        /// <summary>
-        /// After Using This, you need to Dispose it.
-        /// </summary>
-        /// <returns>返回有内接圆的图像</returns>
-        public Bitmap ColorBox()
-        {
-            Rectangle rect = new Rectangle(-6, -6, 12, 12);//内接圆的正方形大小
-            Bitmap ColorBox = (Bitmap)HSVRGB.Clone();
-            int width = ColorBox.Width, height = ColorBox.Height;
-            int x = 0, y = 0;
-            switch (LastChannel)
-            {
-                case HsvRgb.Hue:
-                    x = LastHsv.S * (width - 1) / 255;
-                    y = LastHsv.V * (height - 1) / 255;
-                    break;
-                case HsvRgb.Saturation:
-                    y = LastHsv.H * (width - 1) / 360;
-                    x = LastHsv.V * (height - 1) / 255;
-                    break;
-                case HsvRgb.Value:
-                    y = LastHsv.H * (width - 1) / 360;
-                    x = LastHsv.S * (height - 1) / 255;
-                    break;
-                case HsvRgb.Red:
-                    x = LastColor.G * (width - 1) / 255;
-                    y = LastColor.B * (height - 1) / 255;
-                    break;
-                case HsvRgb.Green:
-                    x = LastColor.B * (width - 1) / 255;
-                    y = LastColor.R * (height - 1) / 255;
-                    break;
-                case HsvRgb.Blue:
-                    x = LastColor.G * (width - 1) / 255;
-                    y = LastColor.R * (height - 1) / 255;
-                    break;
-            }
-            Point pt = new Point(x, y);
-            using (Graphics g = Graphics.FromImage(ColorBox))
-            using (Pen p = new Pen(Color.FromArgb(LastColor.ToArgb() ^ 0xffffff), 2))//相对色，1像素
-            {
-                g.TranslateTransform(pt.X, pt.Y);//变更圆的原点位置
-                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;//抗锯齿
-
-                g.DrawEllipse(p, rect);//给定的正方形内画内接圆
-            }
-            return ColorBox;
-        }
 
         /// <summary>
         ///  After Using This, you need to Dispose it.
         /// </summary>
-        /// <param name="Line">Height should be 10. Width should be 360+4 or 256+4</param>
+        /// <param name="Bitmap">Height should be 10. Width should be 360+4 or 256+4</param>
         /// <param name="channel">HUE, SATURATION, VALUE, RED, GREEN, BLUE</param>
         /// <returns>与长方形颜色选择条图像相对应的指针信息（横向）</returns>
         public void ColorLinePointer(Bitmap Bitmap, HsvRgb channel)
@@ -404,7 +331,6 @@ namespace ColorPicker
                 (channel != HsvRgb.Hue && Width != 256 + 4) ||
                 (channel == HsvRgb.Hue && Width != 361 + 4))
                 return;
-            
 
             int pointX = 0;
             switch (channel)
@@ -443,7 +369,6 @@ namespace ColorPicker
             int color = LastColor.ToArgb();
             int invertcolor = Color.Black.ToArgb();
 
-            //Copy Array To Memory
             int[] DataArray = new int[Width * Height];
             int ControlColor = SystemColors.Control.ToArgb();
             for (int i = 0; i < DataArray.Length; i++)
@@ -464,23 +389,57 @@ namespace ColorPicker
                 bp.CopyFromArray(DataArray);
             }
         }
+        #endregion
 
+        #region 返回结果图像
         /// <summary>
-        /// 快速填充新图像
+        /// After Using This, you need to Dispose it.
         /// </summary>
-        /// <param name="Color">填充颜色</param>
-        /// <param name="Size">图像大小</param>
-        /// <returns>返回填充好单一颜色的图像</returns>
-        public static Bitmap FillUp(Color Color, Size Size)
+        /// <returns>返回有内接圆的图像</returns>
+        public void ColorBox(Image ColorBox)
         {
-            Bitmap Bitmap = new Bitmap(Size.Width, Size.Height);
-            using (FastBitmap bp = new FastBitmap(Bitmap))
+            Rectangle rect = new Rectangle(-6, -6, 12, 12);//内接圆的正方形大小
+            
+            int width = ColorBox.Width, height = ColorBox.Height;
+            int x = 0, y = 0;
+            switch (LastChannel)
             {
-                bp.Lock();
-                bp.Clear(Color);
-                bp.Unlock();
+                case HsvRgb.Hue:
+                    x = LastHsv.S * (width - 1) / 255;
+                    y = LastHsv.V * (height - 1) / 255;
+                    break;
+                case HsvRgb.Saturation:
+                    y = LastHsv.H * (width - 1) / 360;
+                    x = LastHsv.V * (height - 1) / 255;
+                    break;
+                case HsvRgb.Value:
+                    y = LastHsv.H * (width - 1) / 360;
+                    x = LastHsv.S * (height - 1) / 255;
+                    break;
+                case HsvRgb.Red:
+                    x = LastColor.G * (width - 1) / 255;
+                    y = LastColor.B * (height - 1) / 255;
+                    break;
+                case HsvRgb.Green:
+                    x = LastColor.B * (width - 1) / 255;
+                    y = LastColor.R * (height - 1) / 255;
+                    break;
+                case HsvRgb.Blue:
+                    x = LastColor.G * (width - 1) / 255;
+                    y = LastColor.R * (height - 1) / 255;
+                    break;
             }
-            return Bitmap;
+            Point pt = new Point(x, y);
+            using (Graphics g = Graphics.FromImage(ColorBox))
+            using (Pen p = new Pen(Color.FromArgb(LastColor.ToArgb() ^ 0xffffff), 2))//相对色，1像素
+            {
+                g.DrawImage(HSVRGB, new Point(0, 0));
+                g.TranslateTransform(pt.X, pt.Y);//变更圆的原点位置
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;//抗锯齿
+
+                g.DrawEllipse(p, rect);//给定的正方形内画内接圆
+            }
+
         }
 
         /// <summary>
@@ -506,7 +465,6 @@ namespace ColorPicker
             }
             return c;
         }
-
         #endregion
 
     }
