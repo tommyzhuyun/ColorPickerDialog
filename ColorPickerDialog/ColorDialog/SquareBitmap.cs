@@ -60,11 +60,42 @@ namespace ColorPicker
         /// <param name="hsv">指定初始化的颜色</param>
         /// <param name="channel">HUE, SATURATION, VALUE, RED, GREEN, BLUE</param>
         /// <param name="ColorBoard">正方形的颜色面板</param>
-        public SquareBitmap(HSV hsv, HsvRgb channel)
+        public SquareBitmap(HSV hsv)
         {
             this.GivenHsv = this.LastHsv = hsv;
             this.GivenColor = this.LastColor = HSV.ToRgb(hsv);
-            this.GivenChannel = this.LastChannel = channel;
+            this.GivenChannel = this.LastChannel = HsvRgb.Hue;
+
+            this.HSVRGB = null;
+            UpDate(true);
+        }
+        /// <summary>
+        /// 初始化: 无图
+        /// </summary>
+        /// <param name="hsv">指定初始化的颜色</param>
+        /// <param name="channel">HUE, SATURATION, VALUE, RED, GREEN, BLUE</param>
+        /// <param name="ColorBoard">正方形的颜色面板</param>
+        public SquareBitmap(Color color)
+        {
+            this.GivenColor = this.LastColor = color;
+            this.GivenHsv = this.LastHsv = HSV.FromRgb(GivenColor);
+            this.GivenChannel = this.LastChannel = HsvRgb.Hue;
+
+            this.HSVRGB = null;
+            UpDate(true);
+        }
+
+        /// <summary>
+        /// 初始化: 无图
+        /// </summary>
+        /// <param name="hsv">指定初始化的颜色</param>
+        /// <param name="channel">HUE, SATURATION, VALUE, RED, GREEN, BLUE</param>
+        /// <param name="ColorBoard">正方形的颜色面板</param>
+        public SquareBitmap(Color color, HSV hsv)
+        {
+            this.GivenColor = this.LastColor = color;
+            this.GivenHsv = this.LastHsv = hsv;
+            this.GivenChannel = this.LastChannel = HsvRgb.Hue;
 
             this.HSVRGB = null;
             UpDate(true);
@@ -110,6 +141,18 @@ namespace ColorPicker
             UpDate(false);
         }
 
+        /// <summary>
+        /// 更新颜色板3
+        /// </summary>
+        /// <param name="hsv">指定初始化的HSV</param>
+        /// <param name="channel">HUE, SATURATION, VALUE, RED, GREEN, BLUE</param>
+        public void UpDate(Color color, HSV hsv, HsvRgb channel)
+        {
+            this.GivenChannel = channel;
+            this.GivenHsv = hsv;
+            this.GivenColor = color;
+            UpDate(false);
+        }
         /// <summary>
         /// 正式刷新Bitmap
         /// </summary>
