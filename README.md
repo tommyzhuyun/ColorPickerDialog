@@ -9,7 +9,7 @@
    1. 改善了画面撕裂，延迟卡顿的现象
    2. Form使用了双重缓冲
    3. 图像读写高速化的同时改善可读性
-   4. 另外引用SquareBitmap时可自由调整GUI界面，无需固定图像大小
+   4. 另外引用[SquareBitmap](//ColorPickerDialog/ColorDialog/SquareBitmap.cs)时可自由调整GUI界面，除定位指针ColorLinePointer外，无需固定图像大小
 
 ## 使用方法
 试用时：直接启动[Program.cs](/ColorPickerDialog/Program.cs)
