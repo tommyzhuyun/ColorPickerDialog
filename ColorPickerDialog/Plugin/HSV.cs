@@ -25,17 +25,17 @@ namespace FastBitmapLib
         /// <summary>
         /// 色相 (Hue) 0~360
         /// </summary>
-        public int H;
+        public readonly int H;
 
         /// <summary>
         /// 彩度 (Saturation) 0~255 (0~100%)
         /// </summary>
-        public int S;
+        public readonly int S;
 
         /// <summary>
         /// 明度 (Value, Brightness) 0~255 (0~100%)
         /// </summary>
-        public int V;
+        public readonly int V;
 
         /// <summary>
         /// 检测HSV结构是否准确
