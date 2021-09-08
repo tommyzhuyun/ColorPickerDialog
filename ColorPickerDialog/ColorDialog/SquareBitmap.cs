@@ -50,7 +50,7 @@ namespace ColorPicker
             this.GivenColor = this.LastColor = HSV.ToRgb(hsv);
             this.GivenChannel = this.LastChannel = channel;
 
-            this.HSVRGB = new Bitmap(ColorBoard.Width, ColorBoard.Height, PixelFormat.Format32bppPArgb);
+            CreateColorPlate(ColorBoard);
             UpDate(true);
         }
 
@@ -191,6 +191,11 @@ namespace ColorPicker
         #endregion
 
         #region 更新图像
+        public void CreateColorPlate(Size ColorBoard)
+        {
+            this.HSVRGB = new Bitmap(ColorBoard.Width, ColorBoard.Height, PixelFormat.Format32bppPArgb);
+        }
+
         /// <summary>
         /// 正方形颜色面板
         /// </summary>
